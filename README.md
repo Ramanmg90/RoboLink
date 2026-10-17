@@ -88,3 +88,6 @@ test/               تست‌های مدل، ارتباط HTTP و منطق کن�
 - توکن در `shared_preferences` به‌صورت متن ساده ذخیره می‌شود (نه Keystore).
 - HTTP بدون رمزنگاری است و برای دسترسی به ESP8266 در شبکه‌ی محلی `usesCleartextTraffic` فعال می‌شود.
 - کشف خودکار دستگاه ندارد؛ آدرس باید دستی وارد شود. `robolink.local` روی برخی نسخه‌های اندروید کار نمی‌کند؛ از IP استفاده کنید.
+
+## ساخت APK با GitHub Actions
+فایل `.github/workflows/build-apk.yml` با هر push روی شاخه‌ی `main` (یا اجرای دستی از تب Actions) پروژه را می‌سازد و فایل `app-release.apk` را به‌عنوان Artifact با نام `robolink-apk` ذخیره می‌کند. نیازی به نصب Flutter روی سیستم خودتان نیست.
