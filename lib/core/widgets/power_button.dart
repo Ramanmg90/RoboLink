@@ -112,13 +112,13 @@ class _PowerButtonState extends State<PowerButton>
                 gradient: RadialGradient(
                   colors: [
                     g.glassFillStrong,
-                    g.isDark ? AppColors.navy.a(0.85) : g.bgTop,
+                    g.isDark ? AppColors.navy.fade(0.85) : g.bgTop,
                   ],
                 ),
-                border: Border.all(color: accent.a(0.85), width: 2.5),
+                border: Border.all(color: accent.fade(0.85), width: 2.5),
                 boxShadow: [
                   BoxShadow(
-                    color: accent.a(glow),
+                    color: accent.fade(glow),
                     blurRadius: 44,
                     spreadRadius: 2,
                   ),

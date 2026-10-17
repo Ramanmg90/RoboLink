@@ -26,9 +26,9 @@ class StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.a(0.14),
+        color: color.fade(0.14),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.a(0.5)),
+        border: Border.all(color: color.fade(0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

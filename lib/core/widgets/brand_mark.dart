@@ -26,7 +26,7 @@ class BrandMark extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                  color: AppColors.orange.a(0.45),
+                  color: AppColors.orange.fade(0.45),
                   blurRadius: 16,
                   spreadRadius: -3),
             ],

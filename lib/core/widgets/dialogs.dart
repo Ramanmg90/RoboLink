@@ -138,7 +138,7 @@ void showToast(
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: color.a(0.7)),
+          side: BorderSide(color: color.fade(0.7)),
         ),
         content: Text(message, style: TextStyle(color: g.textPrimary)),
       ),

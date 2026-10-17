@@ -75,7 +75,7 @@ class _Item extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color: selected ? AppColors.orange.a(0.16) : Colors.transparent,
+            color: selected ? AppColors.orange.fade(0.16) : Colors.transparent,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -70,8 +70,8 @@ class GlassButton extends StatelessWidget {
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: r,
-              color: filled ? color : color.a(g.isDark ? 0.12 : 0.10),
-              border: Border.all(color: filled ? color : color.a(0.55)),
+              color: filled ? color : color.fade(g.isDark ? 0.12 : 0.10),
+              border: Border.all(color: filled ? color : color.fade(0.55)),
             ),
             child: InkWell(
               onTap: enabled ? onPressed : null,

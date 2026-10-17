@@ -72,7 +72,7 @@ class _Glow extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: RadialGradient(colors: [color.a(opacity), color.a(0)]),
+        gradient: RadialGradient(colors: [color.fade(opacity), color.fade(0)]),
       ),
     );
   }

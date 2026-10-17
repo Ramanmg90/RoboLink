@@ -44,7 +44,7 @@ class GlassCard extends StatelessWidget {
             ? null
             : [
                 BoxShadow(
-                  color: glow!.a(g.glowOpacity),
+                  color: glow!.fade(g.glowOpacity),
                   blurRadius: 26,
                   spreadRadius: -4,
                 ),
@@ -57,7 +57,7 @@ class GlassCard extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: r,
-              color: solid ? g.bgBottom.a(0.9) : null,
+              color: solid ? g.bgBottom.fade(0.9) : null,
               border: Border.all(color: borderColor ?? g.border),
               gradient: LinearGradient(
                 begin: Alignment.topRight,
