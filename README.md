@@ -38,7 +38,7 @@ flutter run              # با گوشی یا امولاتور
 
 ## ساخت APK
 ```bash
-flutter build apk --release
+flutter build apk --release --no-shrink
 # خروجی: build/app/outputs/flutter-apk/app-release.apk
 ```
 برای انتشار عمومی باید کلید امضای اختصاصی تنظیم کنید (راهنمای رسمی Flutter: Build and release an Android app).
