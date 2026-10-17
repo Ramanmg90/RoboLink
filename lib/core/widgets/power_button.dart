@@ -136,7 +136,6 @@ class _PowerButtonState extends State<PowerButton>
               ),
             Material(
               type: MaterialType.transparency,
-              shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
                 onTap: enabled ? widget.onPressed : null,
