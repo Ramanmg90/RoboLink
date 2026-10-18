@@ -41,6 +41,7 @@ class _RoboLinkAppState extends ConsumerState<RoboLinkApp>
   @override
   Widget build(BuildContext context) {
     final mode = ref.watch(settingsProvider.select((s) => s.themeMode));
+    final accent = ref.watch(settingsProvider.select((s) => s.accent));
     return MaterialApp.router(
       title: 'RoboLink',
       debugShowCheckedModeBanner: false,
@@ -51,8 +52,8 @@ class _RoboLinkAppState extends ConsumerState<RoboLinkApp>
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
+      theme: AppTheme.light(accent),
+      darkTheme: AppTheme.dark(accent),
       themeMode: mode,
       routerConfig: _router,
       builder: (context, child) {

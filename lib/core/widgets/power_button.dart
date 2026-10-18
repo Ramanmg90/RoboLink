@@ -8,7 +8,7 @@ enum PowerVisual { off, on, pending, error, unknown }
 
 /// Large circular glass power control.
 ///  off     -> muted surface, red accent
-///  on      -> green neon glow
+///  on      -> green neon glow + slow pulse ring
 ///  pending -> rotating yellow ring (taps are ignored)
 ///  error   -> red warning
 ///  unknown -> neutral, does not imply OFF
@@ -29,31 +29,48 @@ class PowerButton extends StatefulWidget {
 }
 
 class _PowerButtonState extends State<PowerButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _spin = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
   );
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 2600),
+  );
+  bool _pressed = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.visual == PowerVisual.pending) _spin.repeat();
+    _sync();
   }
 
   @override
   void didUpdateWidget(PowerButton old) {
     super.didUpdateWidget(old);
-    if (widget.visual == PowerVisual.pending) {
+    _sync();
+  }
+
+  void _sync() {
+    final v = widget.visual;
+    if (v == PowerVisual.pending) {
       if (!_spin.isAnimating) _spin.repeat();
     } else {
       _spin.stop();
+    }
+    if (v == PowerVisual.on) {
+      if (!_pulse.isAnimating) _pulse.repeat();
+    } else {
+      _pulse.stop();
+      _pulse.value = 0;
     }
   }
 
   @override
   void dispose() {
     _spin.dispose();
+    _pulse.dispose();
     super.dispose();
   }
 
@@ -93,78 +110,122 @@ class _PowerButtonState extends State<PowerButton>
 
     return RepaintBoundary(
       child: Semantics(
-      button: true,
-      enabled: enabled,
-      label: _semanticLabel,
-      excludeSemantics: true,
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.easeOut,
-              width: size,
-              height: size,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    g.glassFillStrong,
-                    g.isDark ? AppColors.navy.fade(0.85) : g.bgTop,
-                  ],
+        button: true,
+        enabled: enabled,
+        label: _semanticLabel,
+        excludeSemantics: true,
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              if (v == PowerVisual.on && !reduceMotion)
+                AnimatedBuilder(
+                  animation: _pulse,
+                  builder: (context, _) {
+                    final t = Curves.easeOut.transform(_pulse.value);
+                    return Transform.scale(
+                      scale: 1 + 0.2 * t,
+                      child: Container(
+                        width: size,
+                        height: size,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: accent.fade(0.45 * (1 - t)),
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                border: Border.all(color: accent.fade(0.85), width: 2.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: accent.fade(glow),
-                    blurRadius: 44,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-            ),
-            if (v == PowerVisual.pending)
-              RepaintBoundary(
-                child: RotationTransition(
-                  turns: reduceMotion
-                      ? const AlwaysStoppedAnimation<double>(0)
-                      : _spin,
-                  child: SizedBox(
-                    width: size,
-                    height: size,
-                    child: CustomPaint(painter: _ArcPainter(accent)),
-                  ),
-                ),
-              ),
-            Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                customBorder: const CircleBorder(),
-                onTap: enabled ? widget.onPressed : null,
+              AnimatedScale(
+                scale: _pressed ? 0.94 : 1.0,
+                duration: const Duration(milliseconds: 120),
+                curve: Curves.easeOut,
                 child: SizedBox(
                   width: size,
                   height: size,
-                  child: Center(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      child: Icon(
-                        icon,
-                        key: ValueKey(icon),
-                        size: size * 0.38,
-                        color: iconColor,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeOut,
+                        width: size,
+                        height: size,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              g.glassFillStrong,
+                              g.isDark ? AppColors.navy.fade(0.85) : g.bgTop,
+                            ],
+                          ),
+                          border: Border.all(color: accent.fade(0.85), width: 2.5),
+                          boxShadow: [
+                            BoxShadow(
+                              color: accent.fade(glow),
+                              blurRadius: 44,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                      if (v == PowerVisual.pending)
+                        RepaintBoundary(
+                          child: RotationTransition(
+                            turns: reduceMotion
+                                ? const AlwaysStoppedAnimation<double>(0)
+                                : _spin,
+                            child: SizedBox(
+                              width: size,
+                              height: size,
+                              child: CustomPaint(painter: _ArcPainter(accent)),
+                            ),
+                          ),
+                        ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: enabled ? widget.onPressed : null,
+                          onHighlightChanged: (h) {
+                            if (_pressed != h) setState(() => _pressed = h);
+                          },
+                          child: SizedBox(
+                            width: size,
+                            height: size,
+                            child: Center(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 250),
+                                child: TweenAnimationBuilder<Color?>(
+                                  key: ValueKey(icon),
+                                  tween: ColorTween(end: iconColor),
+                                  duration: const Duration(milliseconds: 300),
+                                  builder: (context, color, _) => Icon(
+                                    icon,
+                                    size: size * 0.38,
+                                    color: color,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 

@@ -5,13 +5,14 @@ import '../../app/theme/glass_theme.dart';
 import '../utils/color_ext.dart';
 
 /// Translucent tinted button. [filled] gives the solid primary variant.
+/// [color] defaults to the user's accent colour.
 class GlassButton extends StatelessWidget {
   const GlassButton({
     super.key,
     required this.label,
     this.icon,
     this.onPressed,
-    this.color = AppColors.orange,
+    this.color,
     this.filled = false,
     this.loading = false,
     this.expand = true,
@@ -20,7 +21,7 @@ class GlassButton extends StatelessWidget {
   final String label;
   final IconData? icon;
   final VoidCallback? onPressed;
-  final Color color;
+  final Color? color;
   final bool filled;
   final bool loading;
   final bool expand;
@@ -28,11 +29,12 @@ class GlassButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final g = context.glass;
+    final c = color ?? g.accent;
     final enabled = onPressed != null && !loading;
     final r = BorderRadius.circular(18);
     final fg = filled
         ? AppColors.navy
-        : (enabled ? g.readable(color) : g.textSecondary);
+        : (enabled ? g.readable(c) : g.textSecondary);
 
     final row = Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
@@ -70,8 +72,8 @@ class GlassButton extends StatelessWidget {
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: r,
-              color: filled ? color : color.fade(g.isDark ? 0.12 : 0.10),
-              border: Border.all(color: filled ? color : color.fade(0.55)),
+              color: filled ? c : c.fade(g.isDark ? 0.12 : 0.10),
+              border: Border.all(color: filled ? c : c.fade(0.55)),
             ),
             child: InkWell(
               onTap: enabled ? onPressed : null,

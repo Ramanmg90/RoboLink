@@ -9,6 +9,7 @@ import '../../core/widgets/brand_mark.dart';
 import '../../core/widgets/glass_button.dart';
 import '../../core/widgets/glass_card.dart';
 import '../../core/widgets/labels.dart';
+import '../../core/widgets/motion_widgets.dart';
 import '../../core/widgets/power_button.dart';
 import '../../core/widgets/section_widgets.dart';
 import '../../core/widgets/status_badge.dart';
@@ -50,7 +51,7 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           ScreenHeader(title: _greeting(), subtitle: 'کنترل برق هوشمند شما'),
           const SizedBox(height: 20),
-          _Summary(state: s, total: devices.devices.length),
+          FadeSlideIn(child: _Summary(state: s, total: devices.devices.length)),
           const SizedBox(height: 16),
           if (!s.hasDevice)
             EmptyState(
@@ -74,10 +75,12 @@ class HomeScreen extends ConsumerWidget {
               ],
             )
           else ...[
-            _DeviceCard(state: s),
+            FadeSlideIn(index: 1, child: _DeviceCard(state: s)),
             if (s.isDemo) ...[
               const SizedBox(height: 16),
-              const DemoPanel(),
+              const FadeSlideIn(index: 2, child: DemoPanel()),
+              const SizedBox(height: 16),
+              const FadeSlideIn(index: 3, child: _SetupCard()),
             ],
           ],
         ],
@@ -174,7 +177,7 @@ class _DeviceCard extends ConsumerWidget {
               child: Row(
                 children: [
                   Icon(Icons.lightbulb_outline_rounded,
-                      color: g.readable(AppColors.orange)),
+                      color: g.accentText),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -188,7 +191,10 @@ class _DeviceCard extends ConsumerWidget {
                           spacing: 8,
                           runSpacing: 6,
                           children: [
-                            RelayBadge(state: state.relay),
+                            if (state.isInitialLoading)
+                              const Skeleton(width: 96, height: 28, radius: 14)
+                            else
+                              RelayBadge(state: state.relay),
                             if (cfg.isDemo)
                               const StatusBadge(
                                 label: 'شبیه‌سازی‌شده',
@@ -233,6 +239,46 @@ class _DeviceCard extends ConsumerWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Entry point to the real-device setup guide (shown while in demo mode).
+class _SetupCard extends StatelessWidget {
+  const _SetupCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final g = context.glass;
+    return GlassCard(
+      onTap: () => context.push('/setup'),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: g.accent.withAlpha(36),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(Icons.developer_board_rounded, color: g.accentText),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('برد رسید؟',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 2),
+                Text('راهنمای قدم‌به‌قدم راه‌اندازی دستگاه واقعی',
+                    style: TextStyle(color: g.textSecondary, fontSize: 12)),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_left_rounded, color: g.textSecondary),
         ],
       ),
     );

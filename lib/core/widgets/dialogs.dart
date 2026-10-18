@@ -75,7 +75,7 @@ Future<bool> confirmDialog(
         ),
         GlassButton(
           label: confirmLabel,
-          color: destructive ? AppColors.red : AppColors.orange,
+          color: destructive ? AppColors.red : null,
           filled: !destructive,
           onPressed: () => Navigator.of(ctx).pop(true),
         ),
@@ -124,7 +124,7 @@ Future<String?> promptText(
 void showToast(
   BuildContext context,
   String message, {
-  Color color = AppColors.orange,
+  Color? color,
   bool aboveNav = true,
 }) {
   final g = context.glass;
@@ -138,7 +138,7 @@ void showToast(
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: color.fade(0.7)),
+          side: BorderSide(color: (color ?? g.accent).fade(0.7)),
         ),
         content: Text(message, style: TextStyle(color: g.textPrimary)),
       ),

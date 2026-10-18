@@ -62,7 +62,7 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final g = context.glass;
-    final color = selected ? g.readable(AppColors.orange) : g.textSecondary;
+    final color = selected ? g.accentText : g.textSecondary;
     return Semantics(
       button: true,
       selected: selected,
@@ -77,7 +77,7 @@ class _Item extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color: selected ? AppColors.orange.fade(0.16) : Colors.transparent,
+            color: selected ? g.accent.fade(0.16) : Colors.transparent,
           ),
           // mainAxisSize.min is essential: inside Scaffold.bottomNavigationBar
           // the max height is the whole screen, and a default (max-sized)

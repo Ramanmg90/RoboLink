@@ -10,6 +10,7 @@ import '../../core/widgets/glass_button.dart';
 import '../../core/widgets/glass_card.dart';
 import '../../core/widgets/glass_scaffold.dart';
 import '../../core/widgets/labels.dart';
+import '../../core/widgets/motion_widgets.dart';
 import '../../core/widgets/section_widgets.dart';
 import '../../core/widgets/status_badge.dart';
 import '../../data/models/connection_status.dart';
@@ -73,7 +74,7 @@ class DeviceControlScreen extends ConsumerWidget {
             child: Row(
               children: [
                 Icon(Icons.lightbulb_outline_rounded,
-                    color: g.readable(AppColors.orange)),
+                    color: g.accentText),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(cfg.name,
@@ -100,11 +101,15 @@ class DeviceControlScreen extends ConsumerWidget {
               children: [
                 InfoRow(
                   label: 'وضعیت اتصال',
-                  trailing: ConnectionBadge(status: s.connection),
+                  trailing: s.isInitialLoading
+                      ? const Skeleton(width: 80, height: 28, radius: 14)
+                      : ConnectionBadge(status: s.connection),
                 ),
                 InfoRow(
                   label: 'وضعیت رله',
-                  trailing: RelayBadge(state: s.relay),
+                  trailing: s.isInitialLoading
+                      ? const Skeleton(width: 96, height: 28, radius: 14)
+                      : RelayBadge(state: s.relay),
                 ),
                 InfoRow(
                   label: 'آخرین ارتباط موفق',
@@ -171,9 +176,9 @@ class DeviceControlScreen extends ConsumerWidget {
                   child: Text('زمان‌بندی',
                       style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
-                const StatusBadge(
+                StatusBadge(
                   label: 'در نسخه‌های بعدی',
-                  color: AppColors.orange,
+                  color: g.accent,
                 ),
               ],
             ),

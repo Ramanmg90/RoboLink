@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/app_settings.dart';
+import 'accent.dart';
 import 'app_colors.dart';
 import 'glass_theme.dart';
 
 abstract final class AppTheme {
   static const fontFamily = 'Vazirmatn';
 
-  static ThemeData dark() => _build(Brightness.dark, GlassTheme.dark);
-  static ThemeData light() => _build(Brightness.light, GlassTheme.light);
+  static ThemeData dark([AppAccent accent = AppAccent.orange]) =>
+      _build(Brightness.dark, GlassTheme.dark, accent);
 
-  static ThemeData _build(Brightness brightness, GlassTheme g) {
+  static ThemeData light([AppAccent accent = AppAccent.orange]) =>
+      _build(Brightness.light, GlassTheme.light, accent);
+
+  static ThemeData _build(Brightness brightness, GlassTheme base, AppAccent a) {
+    final g = base.copyWith(accent: a.color, accentSoft: a.soft);
     final isDark = brightness == Brightness.dark;
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.orange,
+      seedColor: a.color,
       brightness: brightness,
     ).copyWith(
-      primary: AppColors.orange,
+      primary: a.color,
       onPrimary: AppColors.navy,
       error: AppColors.red,
       surface: isDark ? AppColors.navy2 : Colors.white,
       onSurface: g.textPrimary,
     );
 
-    final base = isDark
+    final typography = isDark
         ? Typography.material2021().white
         : Typography.material2021().black;
-    final textTheme = base.apply(
+    final textTheme = typography.apply(
       fontFamily: fontFamily,
       bodyColor: g.textPrimary,
       displayColor: g.textPrimary,
@@ -67,15 +73,15 @@ abstract final class AppTheme {
         helperStyle: TextStyle(color: g.textSecondary),
         border: border(g.border),
         enabledBorder: border(g.border),
-        focusedBorder: border(AppColors.orange, 1.6),
+        focusedBorder: border(a.color, 1.6),
         errorBorder: border(AppColors.red),
         focusedErrorBorder: border(AppColors.red, 1.6),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
       sliderTheme: SliderThemeData(
-        activeTrackColor: AppColors.orange,
-        thumbColor: AppColors.orange,
+        activeTrackColor: a.color,
+        thumbColor: a.color,
         inactiveTrackColor: g.border,
       ),
       snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),

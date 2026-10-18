@@ -46,7 +46,7 @@ class DevicesScreen extends ConsumerWidget {
             trailing: IconButton.filled(
               tooltip: 'افزودن دستگاه',
               style: IconButton.styleFrom(
-                backgroundColor: AppColors.orange,
+                backgroundColor: g.accent,
                 foregroundColor: AppColors.navy,
               ),
               icon: const Icon(Icons.add_rounded),
@@ -122,7 +122,7 @@ class _DeviceTile extends StatelessWidget {
     final g = context.glass;
     return GlassCard(
       onTap: onTap,
-      borderColor: isActive ? AppColors.orange.withAlpha(150) : null,
+      borderColor: isActive ? g.accent.withAlpha(150) : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,11 +132,11 @@ class _DeviceTile extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: AppColors.orange.withAlpha(30),
+                  color: g.accent.withAlpha(30),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(Icons.lightbulb_outline_rounded,
-                    color: g.readable(AppColors.orange)),
+                    color: g.accentText),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -176,9 +176,9 @@ class _DeviceTile extends StatelessWidget {
             runSpacing: 6,
             children: [
               if (isActive)
-                const StatusBadge(
+                StatusBadge(
                     label: 'دستگاه فعال',
-                    color: AppColors.orange,
+                    color: g.accent,
                     icon: Icons.check_circle_outline_rounded),
               if (device.isDemo)
                 const StatusBadge(

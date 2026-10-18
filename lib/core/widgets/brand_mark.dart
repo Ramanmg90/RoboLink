@@ -19,14 +19,14 @@ class BrandMark extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(13),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [AppColors.orange, Color(0xFFFFB35C)],
+              colors: [g.accent, g.accentSoft],
             ),
             boxShadow: [
               BoxShadow(
-                  color: AppColors.orange.fade(0.45),
+                  color: g.accent.fade(0.45),
                   blurRadius: 16,
                   spreadRadius: -3),
             ],

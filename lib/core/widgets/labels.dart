@@ -46,7 +46,6 @@ class ConnectionBadge extends StatelessWidget {
     return StatusBadge(
       label: status.label,
       color: status.colorOf(g),
-      busy: status == ConnectionStatus.checking,
       icon: switch (status) {
         ConnectionStatus.online => Icons.wifi_rounded,
         ConnectionStatus.offline => Icons.wifi_off_rounded,

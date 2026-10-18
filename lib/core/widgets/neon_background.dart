@@ -36,7 +36,7 @@ class NeonBackground extends StatelessWidget {
                     top: -140,
                     right: -100,
                     child: _Glow(
-                        color: AppColors.orange,
+                        color: g.accent,
                         size: 340,
                         opacity: g.isDark ? 0.20 : 0.16),
                   ),

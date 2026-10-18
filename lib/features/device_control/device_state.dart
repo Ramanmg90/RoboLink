@@ -35,6 +35,16 @@ class DeviceState {
   bool get hasDevice => config != null;
   bool get isDemo => config?.isDemo ?? false;
 
+  /// True until the first status answer (or failure) arrives: the UI shows
+  /// skeleton placeholders instead of guessing a state.
+  bool get isInitialLoading =>
+      hasDevice &&
+      lastSuccessAt == null &&
+      connectionError == null &&
+      errorMessage == null &&
+      (connection == ConnectionStatus.unknown ||
+          connection == ConnectionStatus.checking);
+
   PowerVisual get visual {
     if (commandPending) return PowerVisual.pending;
     if (errorMessage != null) return PowerVisual.error;

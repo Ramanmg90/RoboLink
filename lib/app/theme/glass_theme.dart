@@ -17,6 +17,8 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
     required this.textPrimary,
     required this.textSecondary,
     required this.glowOpacity,
+    required this.accent,
+    required this.accentSoft,
   });
 
   final bool isDark;
@@ -30,6 +32,10 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
   final Color textSecondary;
   final double glowOpacity;
 
+  /// User-selected primary accent (navigation, primary buttons, highlights).
+  final Color accent;
+  final Color accentSoft;
+
   static const dark = GlassTheme(
     isDark: true,
     bgTop: AppColors.navy,
@@ -41,6 +47,8 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
     textPrimary: AppColors.textPrimary,
     textSecondary: AppColors.textSecondary,
     glowOpacity: 0.45,
+    accent: AppColors.orange,
+    accentSoft: Color(0xFFFFB35C),
   );
 
   static const light = GlassTheme(
@@ -54,13 +62,18 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
     textPrimary: Color(0xFF0D1426),
     textSecondary: Color(0xFF4A5673),
     glowOpacity: 0.28,
+    accent: AppColors.orange,
+    accentSoft: Color(0xFFFFB35C),
   );
 
   /// Neon accents are too bright on light backgrounds; darken them for text.
-  Color readable(Color accent) {
-    if (isDark) return accent;
-    return HSLColor.fromColor(accent).withLightness(0.30).toColor();
+  Color readable(Color color) {
+    if (isDark) return color;
+    return HSLColor.fromColor(color).withLightness(0.30).toColor();
   }
+
+  /// The accent in a form that is readable as text/icon colour.
+  Color get accentText => readable(accent);
 
   @override
   GlassTheme copyWith({
@@ -74,6 +87,8 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
     Color? textPrimary,
     Color? textSecondary,
     double? glowOpacity,
+    Color? accent,
+    Color? accentSoft,
   }) {
     return GlassTheme(
       isDark: isDark ?? this.isDark,
@@ -86,6 +101,8 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       glowOpacity: glowOpacity ?? this.glowOpacity,
+      accent: accent ?? this.accent,
+      accentSoft: accentSoft ?? this.accentSoft,
     );
   }
 
@@ -103,6 +120,8 @@ class GlassTheme extends ThemeExtension<GlassTheme> {
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       glowOpacity: glowOpacity + (other.glowOpacity - glowOpacity) * t,
+      accent: Color.lerp(accent, other.accent, t)!,
+      accentSoft: Color.lerp(accentSoft, other.accentSoft, t)!,
     );
   }
 }

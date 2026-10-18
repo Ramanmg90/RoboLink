@@ -227,7 +227,6 @@ class _AddDeviceScreenState extends ConsumerState<AddDeviceScreen> {
               label: editing ? 'ذخیرهٔ تغییرات' : 'ذخیره',
               icon: Icons.check_rounded,
               filled: true,
-              color: AppColors.orange,
               onPressed: (_demo || _tested) ? () => _save(untested: false) : null,
             ),
             if (!_demo && !_tested) ...[
@@ -258,6 +257,7 @@ class _StepTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final g = context.glass;
     return Row(
       children: [
         Container(
@@ -265,15 +265,15 @@ class _StepTitle extends StatelessWidget {
           height: 26,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.orange.withAlpha(40),
+            color: g.accent.withAlpha(40),
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.orange.withAlpha(160)),
+            border: Border.all(color: g.accent.withAlpha(160)),
           ),
           child: Text(number,
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: context.glass.readable(AppColors.orange))),
+                  color: g.accentText)),
         ),
         const SizedBox(width: 10),
         Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/glass_theme.dart';
 import '../../core/widgets/dialogs.dart';
+import '../../core/widgets/motion_widgets.dart';
 import '../../core/widgets/power_button.dart';
 import '../../data/models/connection_status.dart';
 import '../../data/models/relay_state.dart';
@@ -73,7 +74,16 @@ class PowerPanel extends ConsumerWidget {
           onPressed: s.hasDevice ? () => _onTap(context, ref) : null,
         ),
         const SizedBox(height: 18),
-        Semantics(
+        if (s.isInitialLoading)
+          const Column(
+            children: [
+              Skeleton(width: 210, height: 14),
+              SizedBox(height: 8),
+              Skeleton(width: 140, height: 14),
+            ],
+          )
+        else
+          Semantics(
           liveRegion: true,
           child: Text(
             _caption(s),

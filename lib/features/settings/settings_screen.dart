@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/theme/accent.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/glass_theme.dart';
 import '../../core/constants/app_info.dart';
@@ -40,8 +41,8 @@ class SettingsScreen extends ConsumerWidget {
                   showSelectedIcon: false,
                   style: SegmentedButton.styleFrom(
                     foregroundColor: g.textPrimary,
-                    selectedForegroundColor: g.readable(AppColors.orange),
-                    selectedBackgroundColor: AppColors.orange.withAlpha(45),
+                    selectedForegroundColor: g.accentText,
+                    selectedBackgroundColor: g.accent.withAlpha(45),
                   ),
                   segments: const [
                     ButtonSegment(value: ThemeMode.system, label: Text('سیستم')),
@@ -53,7 +54,26 @@ class SettingsScreen extends ConsumerWidget {
                       n.update((o) => o.copyWith(themeMode: v.first)),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 18),
+              const Text('رنگ تأکیدی'),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  for (final a in AppAccent.values)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 14),
+                      child: _AccentDot(
+                        accent: a,
+                        selected: s.accent == a,
+                        onTap: () => n.update((o) => o.copyWith(accent: a)),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text('سبز و قرمز برای وضعیت روشن/خاموش رزرو شده‌اند.',
+                  style: TextStyle(color: g.textSecondary, fontSize: 12)),
+              const SizedBox(height: 10),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: const Text('زبان'),
@@ -104,6 +124,12 @@ class SettingsScreen extends ConsumerWidget {
                 title: const Text('دستگاه‌ها و تنظیمات اتصال'),
                 trailing: const Icon(Icons.chevron_left_rounded),
                 onTap: () => context.go('/devices'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('راهنمای راه‌اندازی دستگاه واقعی'),
+                trailing: const Icon(Icons.chevron_left_rounded),
+                onTap: () => context.push('/setup'),
               ),
             ],
           ),
@@ -209,10 +235,53 @@ class _Section extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 15,
-                  color: g.readable(AppColors.orange))),
+                  color: g.accentText)),
           const SizedBox(height: 10),
           ...children,
         ],
+      ),
+    );
+  }
+}
+
+class _AccentDot extends StatelessWidget {
+  const _AccentDot({
+    required this.accent,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final AppAccent accent;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final g = context.glass;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: 'رنگ ${accent.label}',
+      excludeSemantics: true,
+      child: InkResponse(
+        onTap: onTap,
+        radius: 30,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: accent.color,
+            border: Border.all(
+              color: selected ? g.textPrimary : Colors.transparent,
+              width: 2.5,
+            ),
+          ),
+          child: selected
+              ? const Icon(Icons.check_rounded, color: AppColors.navy)
+              : null,
+        ),
       ),
     );
   }
