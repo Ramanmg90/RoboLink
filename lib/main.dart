@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
+import 'core/storage/key_value_store.dart';
 import 'core/storage/local_store.dart';
 
 /// Shows the error text on screen instead of a blank/grey screen so a failure
@@ -38,10 +38,10 @@ Future<void> main() async {
   };
 
   try {
-    final prefs = await SharedPreferences.getInstance();
+    final store = await FileKeyValueStore.open();
     runApp(
       ProviderScope(
-        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        overrides: [keyValueStoreProvider.overrideWithValue(store)],
         child: const RoboLinkApp(),
       ),
     );

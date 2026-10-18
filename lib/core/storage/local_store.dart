@@ -2,24 +2,24 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/app_settings.dart';
 import '../../data/models/device_config.dart';
 import '../../data/models/history_event.dart';
+import 'key_value_store.dart';
 
-/// Overridden in main() with the real instance.
-final sharedPreferencesProvider = Provider<SharedPreferences>(
-  (ref) => throw UnimplementedError('sharedPreferencesProvider not overridden'),
+/// Overridden in main() with the real file-backed store.
+final keyValueStoreProvider = Provider<KeyValueStore>(
+  (ref) => throw UnimplementedError('keyValueStoreProvider not overridden'),
 );
 
 final storeProvider =
-    Provider<LocalStore>((ref) => LocalStore(ref.watch(sharedPreferencesProvider)));
+    Provider<LocalStore>((ref) => LocalStore(ref.watch(keyValueStoreProvider)));
 
-/// Thin typed wrapper over SharedPreferences.
+/// Thin typed wrapper over a [KeyValueStore].
 class LocalStore {
   LocalStore(this._p);
-  final SharedPreferences _p;
+  final KeyValueStore _p;
 
   static const _kDevices = 'devices.v1';
   static const _kActive = 'activeDevice.v1';

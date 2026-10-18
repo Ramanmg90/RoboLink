@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:robolink/core/errors/app_exception.dart';
+import 'package:robolink/core/storage/key_value_store.dart';
 import 'package:robolink/core/storage/local_store.dart';
 import 'package:robolink/core/widgets/power_button.dart';
 import 'package:robolink/data/models/connection_status.dart';
@@ -13,7 +14,6 @@ import 'package:robolink/data/services/device_gateway.dart';
 import 'package:robolink/data/services/gateway_provider.dart';
 import 'package:robolink/features/device_control/device_controller.dart';
 import 'package:robolink/features/history/history_notifier.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeGateway implements DeviceGateway {
   RelayState relay = RelayState.off;
@@ -45,11 +45,9 @@ class FakeGateway implements DeviceGateway {
 }
 
 Future<(ProviderContainer, FakeGateway)> setup() async {
-  SharedPreferences.setMockInitialValues({});
-  final prefs = await SharedPreferences.getInstance();
   final fake = FakeGateway();
   final container = ProviderContainer(overrides: [
-    sharedPreferencesProvider.overrideWithValue(prefs),
+    keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
     gatewayFactoryProvider.overrideWithValue((config, timeout) => fake),
   ]);
   addTearDown(container.dispose);
