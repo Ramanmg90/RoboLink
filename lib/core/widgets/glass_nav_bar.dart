@@ -34,6 +34,8 @@ class GlassNavBar extends StatelessWidget {
           blur: 16,
           padding: const EdgeInsets.all(6),
           child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               for (var i = 0; i < items.length; i++)
                 Expanded(
@@ -77,7 +79,11 @@ class _Item extends StatelessWidget {
             borderRadius: BorderRadius.circular(22),
             color: selected ? AppColors.orange.fade(0.16) : Colors.transparent,
           ),
+          // mainAxisSize.min is essential: inside Scaffold.bottomNavigationBar
+          // the max height is the whole screen, and a default (max-sized)
+          // Column would stretch the bar over the entire page.
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(item.icon, size: 24, color: color),
