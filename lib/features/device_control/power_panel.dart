@@ -62,12 +62,14 @@ class PowerPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final g = context.glass;
     final s = ref.watch(deviceControllerProvider);
+    final width = MediaQuery.sizeOf(context).width;
+    final buttonSize = size < width * 0.52 ? size : width * 0.52;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         PowerButton(
           visual: s.visual,
-          size: size,
+          size: buttonSize,
           onPressed: s.hasDevice ? () => _onTap(context, ref) : null,
         ),
         const SizedBox(height: 18),

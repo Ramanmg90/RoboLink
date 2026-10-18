@@ -103,3 +103,8 @@ class EmptyState extends StatelessWidget {
     );
   }
 }
+
+/// Bottom padding that keeps scrollable content clear of the glass nav bar
+/// (bar height + its margin + the system navigation inset).
+double navClearance(BuildContext context) =>
+    104 + MediaQuery.viewPaddingOf(context).bottom;

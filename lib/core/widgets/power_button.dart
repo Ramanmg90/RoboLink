@@ -91,7 +91,8 @@ class _PowerButtonState extends State<PowerButton>
     final iconColor = g.readable(accent);
     final enabled = v != PowerVisual.pending && widget.onPressed != null;
 
-    return Semantics(
+    return RepaintBoundary(
+      child: Semantics(
       button: true,
       enabled: enabled,
       label: _semanticLabel,
@@ -126,12 +127,16 @@ class _PowerButtonState extends State<PowerButton>
               ),
             ),
             if (v == PowerVisual.pending)
-              RotationTransition(
-                turns: reduceMotion ? const AlwaysStoppedAnimation<double>(0) : _spin,
-                child: SizedBox(
-                  width: size,
-                  height: size,
-                  child: CustomPaint(painter: _ArcPainter(accent)),
+              RepaintBoundary(
+                child: RotationTransition(
+                  turns: reduceMotion
+                      ? const AlwaysStoppedAnimation<double>(0)
+                      : _spin,
+                  child: SizedBox(
+                    width: size,
+                    height: size,
+                    child: CustomPaint(painter: _ArcPainter(accent)),
+                  ),
                 ),
               ),
             Material(
@@ -159,7 +164,7 @@ class _PowerButtonState extends State<PowerButton>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

@@ -63,8 +63,8 @@ class GlassButton extends StatelessWidget {
       enabled: enabled,
       label: label,
       excludeSemantics: true,
-      child: Opacity(
-        opacity: enabled || loading ? 1 : 0.55,
+      child: _Dim(
+        dim: !(enabled || loading),
         child: Material(
           type: MaterialType.transparency,
           child: Ink(
@@ -89,4 +89,14 @@ class GlassButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Dim extends StatelessWidget {
+  const _Dim({required this.dim, required this.child});
+  final bool dim;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      dim ? Opacity(opacity: 0.55, child: child) : child;
 }

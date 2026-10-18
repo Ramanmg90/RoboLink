@@ -34,7 +34,7 @@ class HistoryScreen extends ConsumerWidget {
     return SafeArea(
       bottom: false,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 130),
+        padding: EdgeInsets.fromLTRB(20, 12, 20, navClearance(context)),
         children: [
           ScreenHeader(
             title: 'تاریخچه',

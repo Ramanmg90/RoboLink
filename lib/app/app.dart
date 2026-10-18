@@ -55,6 +55,18 @@ class _RoboLinkAppState extends ConsumerState<RoboLinkApp>
       darkTheme: AppTheme.dark(),
       themeMode: mode,
       routerConfig: _router,
+      builder: (context, child) {
+        final mq = MediaQuery.of(context);
+        return MediaQuery(
+          data: mq.copyWith(
+            textScaler: mq.textScaler.clamp(
+              minScaleFactor: 0.9,
+              maxScaleFactor: 1.15,
+            ),
+          ),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
